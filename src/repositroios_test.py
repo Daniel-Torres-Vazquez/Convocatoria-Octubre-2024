@@ -23,6 +23,14 @@ def media_min_test(datos):
     for e in cla:
         print(e,cla[e])
 
+    print("############################################")
+    print("############################################")
+    print("############################################")
+
+    cla=media_minutos_entre_commits_por_usuario(datos,datetime.strptime("2023-01-01", "%Y-%m-%d"),datetime.strptime("2023-11-01", "%Y-%m-%d"))
+    for e in cla:
+        print(e,cla[e])
+
 if __name__ == "__main__":
     ruta="./data/repositorios.csv"
     datos=lee_repositorios(ruta)

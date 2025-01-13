@@ -92,7 +92,9 @@ def recomendar_lenguajes (repositorios:List[Repositorio], repositorio:Repositori
 #16:00
 
 def media_minutos_entre_commits(lista_commits: List[Commit]) -> float:
-
+    """Recibe una lista de tuplas de tipo Commit, y devuelve la media 
+    de minutos entre cada dos commits consecutivos en el tiempo, por lo que, previamente, deberá 
+    ordenar dichos commits . Si la lista tiene menos de dos elementos, la función devolverá None.  """
     if len(lista_commits)<2:
         return None
     media=[]
@@ -105,7 +107,16 @@ def media_minutos_entre_commits(lista_commits: List[Commit]) -> float:
 
 
 def media_minutos_entre_commits_por_usuario (repositorios:List[Repositorio], fecha_ini:Optional[date]=None, fecha_fin:Optional[date]=None)->Dict[str, float]: 
-    
+    """Dada una lista de tuplas de tipo Repositorio, una 
+fecha inicial y una fecha final (ambas opcionales con valor por defecto None), devuelve un diccionario en el 
+que las claves son los nombres de los propietarios de los repositorios, y los valores la media de minutos entre 
+los commits realizados en los repositorios de cada propietario dentro del intervalo de fechas dado por 
+[fecha_ini, fecha_fin). Si fecha_ini es None no se restringe el inicio del intervalo, y si fecha_fin es None, no se 
+limita el final del intervalo. Si ambas fechas son None, se consideran todos los commits sin restricción 
+temporal.  
+Es importante tener en cuenta que un mismo propietario puede tener varios repositorios, por lo que los 
+cálculos abarcarán todos los commits realizados en los repositorios de ese propietario dentro del intervalo 
+especificado.  """
     res=defaultdict(list)
     vamba=[]
     if (fecha_ini==None) & (fecha_fin==None):
@@ -128,8 +139,11 @@ def media_minutos_entre_commits_por_usuario (repositorios:List[Repositorio], fec
             for u in i.commits:
                 if fecha_ini<=u.fecha_hora<fecha_fin:
                     vamba.append(u)
-
                 media=media_minutos_entre_commits(vamba)
-                res[i.propietario].append(media)
+                if media!=None:
+                    res[i.propietario].append(media)
     
+    for e in res:
+        if len(res[e])>0:
+            res[e]= sum(res[e])/len(res[e])
     return res
